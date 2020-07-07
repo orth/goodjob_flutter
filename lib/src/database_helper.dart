@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:goodjob/src/business.dart';
 import 'package:goodjob/goodjob.dart';
+import 'package:goodjob/src/log_utils.dart';
 import 'package:path/path.dart';
 import 'package:quiver/cache.dart';
 import 'package:sqflite/sqflite.dart';
@@ -41,20 +42,23 @@ class DatabaseHelper {
         list.forEach((v) async {
           String name = v.lang;
           tableName = name;
-          debugPrint("tableName:" + tableName.toString());
+//          debugPrint("tableName:" + tableName.toString());
           await db.execute('CREATE TABLE $name (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)');
         });
       });
       map = new Map();
       list.forEach((v) {
         //循环插入所有数据
-        v.listMap.forEach((f) {
-          insertData(f, v.lang);
-        });
+        try {
+          v.listMap.forEach((f) {
+            insertData(f, v.lang);
+          });
+        } catch (e) {
+          LogUtil.v(e.toString());
+        }
         String name = v.lang;
         map[name] = v.mapCache;
       });
-      print("mapCache:${map.length.toString()}");
     }
 
     if (tableName.isNotEmpty) {
@@ -71,30 +75,26 @@ class DatabaseHelper {
         txn.insert(tableName, map);
       });
     } else {
-      debugPrint("数据库未打开");
+      LogUtil.v("数据库未打开");
     }
   }
 
   Future queryAll() async {
-    debugPrint("tableName:" + tableName);
     if (tableName.isNotEmpty) {
       List<Map<String, dynamic>> records = await _database.query(tableName);
-// Update it in memory...this will throw an exception
-//      mapRead['my_column'] = 1;
       return records.toString();
     }
   }
 
   //获取翻译文字
   Future queryValue(String nameKey) async {
-    debugPrint("queryValue:$nameKey,$tableName");
+//    debugPrint("queryValue:$nameKey,$tableName");FF
     try {
       List<Map> maps = await _database.query(tableName,
           columns: ['name', 'value'], where: '"name" = ?', whereArgs: [nameKey]);
-      debugPrint(tableName + '----' + maps.toString());
       return maps.first['value'];
     } catch (e) {
-      debugPrint(e.toString());
+      LogUtil.e("Translation Error !");
       return 0;
     }
   }
@@ -103,12 +103,12 @@ class DatabaseHelper {
     MapCache<String, String> mapCache = new MapCache();
     try {
       mapCache = map[tableName];
-      print("mapCache:" + mapCache.toString());
+      LogUtil.v(mapCache.toString(), tag: "mapCache");
       var v = await mapCache.get(nameKey);
-      print("mapCacheValue:" + v.toString());
+      LogUtil.v(v.toString(), tag: "mapCacheValue");
       return v;
     } catch (e) {
-      debugPrint(e.toString());
+      LogUtil.e("Translation Error !");
       return 0;
     }
   }

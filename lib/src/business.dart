@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:goodjob/src/goodjob_entity.dart';
 import 'package:goodjob/src/language_entity.dart';
 import 'package:goodjob/src/http_util.dart';
+import 'package:goodjob/src/log_utils.dart';
 import 'package:quiver/cache.dart';
 import 'package:goodjob/src/config.dart';
 import 'package:goodjob/src/database_helper.dart';
 import 'package:goodjob/src/response.dart';
 import 'package:goodjob/src/api.dart';
+
 class GoodJobBusiness {
   // ignore: missing_return
   static GoodJobBusiness _goodJobBusiness;
@@ -24,21 +26,21 @@ class GoodJobBusiness {
   GoodJobConfig config = GoodJobConfig.getInstances();
 
   ///初始化sdk
-  Future initSDK({apiKey = "", apiSecret = "", token = "", id}) async {
-    config.initAuth(
-        apiKey: apiKey,
-        apiSecret: apiSecret);
+  Future initSDK({apiKey = "", apiSecret = "", token = "", id, isDebug}) async {
+    config.initAuth(apiKey: apiKey, apiSecret: apiSecret);
+    LogUtil.init(isDebug: isDebug, tag: "goodjob:");
     var r = await _databaseHelper.init(id: id);
     return r;
     print("数据库初始化结果" + r.toString());
   }
 
   ///获取当前语言
-  getLanguage(){
+  getLanguage() {
     return _databaseHelper.tableName;
   }
+
   ///切换语言
-  switchLanguage({language}){
+  switchLanguage({language}) {
     _databaseHelper.tableName = language;
   }
 
@@ -106,11 +108,9 @@ class GoodJobBusiness {
           if (languageModel.lang.isNotEmpty) {
             listLang.add(languageModel);
             mapCache[languageModel.lang] = languageModel.mapCache;
-            print("mapCache:" + languageModel.mapCache.toString());
           }
         });
-        debugPrint(
-            res.code.toString() + "--${mapCache.length.toString()}--" + listLang.length.toString());
+        LogUtil.e(res.code.toString());
       }
       return listLang;
     } else {
