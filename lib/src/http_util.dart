@@ -7,6 +7,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/widgets.dart';
 import 'package:crypto/crypto.dart';
 import 'package:goodjob/src/api.dart';
+import 'package:goodjob/src/log_utils.dart';
 import 'package:goodjob/src/response.dart';
 import 'package:goodjob/src/config.dart';
 /// 监听当前的网络请求状态，根据状态显示一些必要提醒
@@ -62,7 +63,7 @@ class HttpUtil {
     //加密
     var hmacSha256 = new Hmac(sha256, utf8.encode(GoodJobConfig.mApiSecret)); // HMAC-SHA256
     var digest = hmacSha256.convert(utf8.encode(keyName));
-    print('params:$keyName\sign:' +
+    LogUtil.v('params:$keyName\sign:' +
         digest.toString() +
         '\napikey:${GoodJobConfig.mApiKey}\n'
             'timestamp:$timestamp');
@@ -72,7 +73,6 @@ class HttpUtil {
       options.headers['timestamp'] = timestamp;
       options.headers['sign'] = digest;
     }
-    print("options:" + options.toString());
     ResponseEntity entity;
     try {
       response = await dio.get(url,
@@ -85,7 +85,7 @@ class HttpUtil {
     } on DioError catch (e) {
       entity = new ResponseEntity(code: -1, status: "请求出错：${e.toString()}");
     }
-    debugPrint("$url------" + entity.toString());
+    LogUtil.v("$url------" + entity.toString());
     return entity;
   }
 
@@ -94,9 +94,8 @@ class HttpUtil {
     String url,
     Map<String, dynamic> params,
   ) async {
-    print(params.toString());
-    print("url == " + url.toString());
-
+    LogUtil.v(params.toString());
+    LogUtil.v("url == " + url.toString());
     Response response;
     Dio dio = getInstance();
     dio.interceptors.add(new ExInterceptor());
@@ -111,7 +110,7 @@ class HttpUtil {
     } on DioError catch (e) {
       entity = new ResponseEntity(code: -1, status: "请求出错：${e.toString()}");
     }
-    debugPrint(entity.toString());
+    LogUtil.v(entity.toString());
     return entity;
   }
 }
