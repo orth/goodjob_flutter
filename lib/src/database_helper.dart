@@ -103,9 +103,9 @@ class DatabaseHelper {
     MapCache<String, String> mapCache = new MapCache();
     try {
       mapCache = map[tableName];
-      LogUtil.v(mapCache.toString(), tag: "mapCache");
+//      LogUtil.v(mapCache.toString(), tag: "mapCache");
       var v = await mapCache.get(nameKey);
-      LogUtil.v(v.toString(), tag: "mapCacheValue");
+//      LogUtil.v(v.toString(), tag: "mapCacheValue");
       return v;
     } catch (e) {
       LogUtil.e("Translation Error !");

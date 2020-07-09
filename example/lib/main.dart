@@ -46,10 +46,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GoodJobBusiness _business;
-  List<LanguageModel> _listModel;
-  String status = "";
-  String contentDoc = "";
-  List<List<Map<String, dynamic>>> _listJson = new List();
   String textView = '';
   String title = "";
 
@@ -58,9 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _business = GoodJobBusiness.getInstance();
-//    _listEntity = List();
-//    _list = List();
-    _listModel = List();
     //获取国家、语言列表
     _business.getLanguageList();
 
@@ -68,45 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _requestPermission() async {
-    _business.initSDK(
+   var res =  await _business.initSDK(
         apiKey: "b59f1ecd-a92a-4f3f-9340-fcaaef411bd1",
         apiSecret: "c7ea7d5a-15ae-4ef2-ae76-d845d75d6d30",
-        id: '10133');
+        id: '10133',
+        isDebug: true);
+   //设置默认语言
+    Provider.of<Counter>(context, listen: false).initCounter(lang: "en");
   }
 
-  _getLanguageList() async {
-//    _listEntity = await _business.getLanguageList();
-//    _list = await _business.getGoodJobData('10133');
-//    if (_list.length > 0) {
-//      contentDoc = _list[0].contentDoc;
-//      (jsonDecode(contentDoc)['List'] as List).forEach((v) {
-//        List<Map<String, dynamic>> listMap = List();
-//        (v["list"] as List).forEach((f) {
-//          Map<String, dynamic> map = new Map();
-//          map['key' + f['index'].toString()] = f['name'];
-//          listMap.add(map);
-//        });
-//        _listJson.add(listMap);
-//      });
-//    }
-//    debugPrint(_listJson.toString());
-//    status = "加载完成";
-//    setState(() {});
-  }
-
-  _getLanguageListJson() async {
-//    _listModel = await _business.getGoodJobDataJson('10133');
-//    debugPrint(_listModel.toString());
-//    var res = await _databaseHelper.queryAll();
-//    textView = res.toString();
-    status = "加载完成";
-//    writerJson();
-    setState(() {});
-  }
-
-  Widget goodjobjson() {
-    return _listModel.length > 0 ? Text(_listModel[0].toString()) : SizedBox();
-  }
 
   Widget locali() {
     return Column(
@@ -144,13 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
             value: "ko",
           ),
         ]);
-//    _databaseHelper.tableName = v.toString();
-//    _databaseHelper.queryValue("key10").then((r) {
-//      debugPrint("====" + r.toString());
-//      setState(() {
-//        title = r.toString();
-//      });
-//    });
     Provider.of<Counter>(context, listen: false).initCounter(lang: v.toString());
   }
 
@@ -171,84 +127,14 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      bottomNavigationBar: SafeArea(
-          child: Container(
-        height: 50.0,
-        child: Row(
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                setState(() {
-                  status = '正在获取...';
-                });
-                _getLanguageListJson();
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('獲取'),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('read'),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('writer'),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-//                _databaseHelper.clearDB();
-                _requestPermission();
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('init'),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-//                _databaseHelper.insertData();
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('insert'),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('queryValue'),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Provider.of<Counter>(context, listen: false).add();
-              },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('add'),
-              ),
-            ),
-          ],
-        ),
-      )),
       body: Stack(
         children: <Widget>[
           Center(
-            child: Text(status),
+            child: Text('status'),
           ),
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                status != "加载完成" ? locali() : Text(textView),
 //                Count(),
 //                Text('${Provider.of<Counter>(context).key0}'),
 //                Text('${Provider.of<Counter>(context).key1}'),

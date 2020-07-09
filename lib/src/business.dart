@@ -29,8 +29,8 @@ class GoodJobBusiness {
     config.initAuth(apiKey: apiKey, apiSecret: apiSecret);
     LogUtil.init(isDebug: isDebug, tag: "goodjob:");
     var r = await _databaseHelper.init(id: id);
+    LogUtil.v("数据库初始化结果" + r.toString());
     return r;
-    print("数据库初始化结果" + r.toString());
   }
 
   ///获取当前语言
