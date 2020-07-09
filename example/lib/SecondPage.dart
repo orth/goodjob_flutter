@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:goodjob/goodjob.dart';
 import 'counter.dart';
-import 'main.dart';
 
 class SecondPage extends StatelessWidget {
   @override

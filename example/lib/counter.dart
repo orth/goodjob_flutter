@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:goodjob/goodjob.dart';
+import 'package:goodjob_flutter/goodjob_flutter.dart';
 
 class Counter with ChangeNotifier, DiagnosticableTreeMixin {
   String _key10 = "";

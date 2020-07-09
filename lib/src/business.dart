@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:goodjob/src/goodjob_entity.dart';
-import 'package:goodjob/src/language_entity.dart';
-import 'package:goodjob/src/http_util.dart';
-import 'package:goodjob/src/log_utils.dart';
+import 'package:goodjob_flutter/src/goodjob_entity.dart';
+import 'package:goodjob_flutter/src/language_entity.dart';
+import 'package:goodjob_flutter/src/http_util.dart';
+import 'package:goodjob_flutter/src/log_utils.dart';
 import 'package:quiver/cache.dart';
-import 'package:goodjob/src/config.dart';
-import 'package:goodjob/src/database_helper.dart';
-import 'package:goodjob/src/response.dart';
-import 'package:goodjob/src/api.dart';
+import 'package:goodjob_flutter/src/config.dart';
+import 'package:goodjob_flutter/src/database_helper.dart';
+import 'package:goodjob_flutter/src/response.dart';
+import 'package:goodjob_flutter/src/api.dart';
 
 class GoodJobBusiness {
   // ignore: missing_return
