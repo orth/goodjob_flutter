@@ -95,22 +95,13 @@ class GoodJobBusiness {
     Map<String, MapCache<String, String>> mapCache = new Map();
     ResponseEntity res = await HttpUtil.get(Api.getGoodJobData + id, needToken: true);
     if (res.code == 0) {
-      (res.data['contents'] as List).forEach((f) {
-        list.add(GoodjobEntity.fromJson(f));
+      (res.data as List).forEach((v) {
+        LanguageModel languageModel = LanguageModel.fromJson(v);
+        if (languageModel.lang.isNotEmpty) {
+          listLang.add(languageModel);
+          mapCache[languageModel.lang] = languageModel.mapCache;
+        }
       });
-      if (list.length > 0) {
-        //获取json
-        GoodjobEntity goodjobEntity = list[0];
-        //获取文字对应翻译
-        (jsonDecode(goodjobEntity.contentDoc)['List'] as List).forEach((v) {
-          LanguageModel languageModel = LanguageModel.fromJson(v);
-          if (languageModel.lang.isNotEmpty) {
-            listLang.add(languageModel);
-            mapCache[languageModel.lang] = languageModel.mapCache;
-          }
-        });
-        LogUtil.e(res.code.toString());
-      }
       return listLang;
     } else {
       return [];
@@ -131,9 +122,10 @@ class LanguageModel {
       listMap = new List();
       (json["list"] as List).forEach((f) {
         Map<String, dynamic> map = new Map();
-        map['name'] = 'key' + (f['index'].toString());
+        String keyName = f["u_key"].toString().isEmpty ? f["g_key"] : f["u_key"];
+        map['name'] = keyName;
         map['value'] = f['name'];
-        mapCache.set('key' + (f['index'].toString()), f['name']);
+        mapCache.set(keyName, f['name']);
         listMap.add(map);
       });
     }
