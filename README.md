@@ -1,4 +1,4 @@
-# flutterpackagegoodjob
+# Goodjob package for flutter
 
 A new Flutter package.
 
@@ -27,7 +27,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## 集成
 
-1. 通过 GitHub 下载依赖 [https://github.com/wapchief/goodjob](https://github.com/wapchief/goodjob)，手动导入项目
+1. 通过 GitHub 下载依赖 [https://github.com/orth/goodjob_flutter](https://github.com/orth/goodjob_flutter)，手动导入项目
 2. dependencies 方式引入暂不支持
 ## 使用
 
@@ -35,8 +35,8 @@ samples, guidance on mobile development, and a full API reference.
 ```plain
 GoodJobBusiness _business = GoodJobBusiness.getInstance();
 _business.initSDK(
-    apiKey: "b59f1ecd-a92a-4f3f-9340-fcaaef411bd1",
-    apiSecret: "c7ea7d5a-15ae-4ef2-ae76-d845d75d6d30",
+    apiKey: "goodjob_api_key",
+    apiSecret: "goodjob_api_secret",
     id: '10133');
     
 ```
