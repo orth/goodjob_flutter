@@ -85,7 +85,7 @@ class HttpUtil {
     } on DioError catch (e) {
       entity = new ResponseEntity(code: -1, status: "请求出错：${e.toString()}");
     }
-    LogUtil.v("$url------" + entity.toString());
+    LogUtil.v("${Api.baseUrl}$url------" + entity.toString());
     return entity;
   }
 
