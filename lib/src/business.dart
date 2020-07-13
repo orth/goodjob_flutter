@@ -96,11 +96,10 @@ class GoodJobBusiness {
     ResponseEntity res = await HttpUtil.get(Api.getGoodJobData + id, needToken: true);
     if (res.code == 0) {
       (res.data as List).forEach((v) {
-        LanguageModel languageModel = LanguageModel.fromJson(v);
-        if (languageModel.lang.isNotEmpty) {
-          listLang.add(languageModel);
-          mapCache[languageModel.lang] = languageModel.mapCache;
-        }
+//        LanguageModel languageModel = LanguageModel.fromJson(v);
+        mapCache = v;
+        MapCache<String, String> cache = new MapCache();
+
       });
       return listLang;
     } else {

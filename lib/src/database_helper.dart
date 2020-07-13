@@ -4,9 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:goodjob_flutter/src/business.dart';
 import 'package:goodjob_flutter/goodjob_flutter.dart';
 import 'package:goodjob_flutter/src/log_utils.dart';
+import 'package:goodjob_flutter/src/response.dart';
 import 'package:path/path.dart';
 import 'package:quiver/cache.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'api.dart';
+import 'http_util.dart';
 
 class DatabaseHelper {
   Database _database;
@@ -32,35 +36,31 @@ class DatabaseHelper {
 
   ///数据库初始化
   Future init({id}) async {
-    List<LanguageModel> list =
-        await GoodJobBusiness().getGoodJobDataJson(id == null ? "10133" : id);
+    ResponseEntity res = await HttpUtil.get(Api.getGoodJobData + id, needToken: true);
+    if (res.code == 0) {
+      map = new Map();
+      (res.data).forEach((k, v) async {
+        MapCache<String, String> cache = new MapCache();
+        v.forEach((k1, v1) async {
+          cache.set(k1, v1);
+        });
+        map[k] = cache;
+      });
+    }
     if (_database == null || !_database.isOpen) {
       var databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'demo.db');
       _database = await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
         //几种语言就建几个表
-        list.forEach((v) async {
-          String name = v.lang;
-          tableName = name;
-//          debugPrint("tableName:" + tableName.toString());
-          await db.execute('CREATE TABLE $name (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)');
+        res.data.forEach((k, v) async {
+          tableName = k;
+          await db.execute('CREATE TABLE $k (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)');
+          await _database.transaction((txn) async {
+            txn.insert(tableName, v);
+          });
         });
       });
-      map = new Map();
-      list.forEach((v) {
-        //循环插入所有数据
-        try {
-          v.listMap.forEach((f) {
-            insertData(f, v.lang);
-          });
-        } catch (e) {
-          LogUtil.v(e.toString());
-        }
-        String name = v.lang;
-        map[name] = v.mapCache;
-      });
     }
-
     if (tableName.isNotEmpty) {
       return 1;
     } else {
@@ -103,9 +103,9 @@ class DatabaseHelper {
     MapCache<String, String> mapCache = new MapCache();
     try {
       mapCache = map[tableName];
-//      LogUtil.v(mapCache.toString(), tag: "mapCache");
+      LogUtil.v(mapCache.toString(), tag: "mapCache");
       var v = await mapCache.get(nameKey);
-//      LogUtil.v(v.toString(), tag: "mapCacheValue");
+      LogUtil.v(v.toString(), tag: "mapCacheValue----$tableName");
       return v;
     } catch (e) {
       LogUtil.e("Translation Error !");

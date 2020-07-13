@@ -5,5 +5,5 @@ class Api {
   static String languageList = "trans/v1/check/standard";
 
   ///获取json信息
-  static String getGoodJobData = 'content/sdk?mid=';
+  static String getGoodJobData = 'content/web?mid=';
 }
