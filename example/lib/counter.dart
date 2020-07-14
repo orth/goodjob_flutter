@@ -53,21 +53,21 @@ class Counter with ChangeNotifier, DiagnosticableTreeMixin {
     if (lang != null) {
       _business.switchLanguage(language: lang);
     }
-    _key10 = await _business.interpret("u_key_10");
-    _key0 = await _business.interpret("u_key_15");
-    _key1 = await _business.interpret("u_key_1");
-    _key3 = await _business.interpret("u_key_2");
-    _key2 = await _business.interpret("u_key_3");
-    _key4 = await _business.interpret("u_key_4");
-    _key5 = await _business.interpret("u_key_5");
-    _key6 = await _business.interpret("u_key_6");
-    _key7 = await _business.interpret("u_key_7");
-    _key8 = await _business.interpret("u_key_8");
-    _key9 = await _business.interpret("u_key_9");
-    _key11 = await _business.interpret("u_key_11");
-    _key12 = await _business.interpret("u_key_12");
-    _key13 = await _business.interpret("u_key_13");
-    _key14 = await _business.interpret("u_key_14");
+    _key10 = await _business.interpret("g_key_10");
+    _key0 = await _business.interpret("g_key_15");
+    _key1 = await _business.interpret("g_key_1");
+    _key3 = await _business.interpret("g_key_2");
+    _key2 = await _business.interpret("g_key_3");
+    _key4 = await _business.interpret("g_key_4");
+    _key5 = await _business.interpret("g_key_5");
+    _key6 = await _business.interpret("g_key_6");
+    _key7 = await _business.interpret("g_key_7");
+    _key8 = await _business.interpret("g_key_8");
+    _key9 = await _business.interpret("g_key_9");
+    _key11 = await _business.interpret("g_key_11");
+    _key12 = await _business.interpret("g_key_12");
+    _key13 = await _business.interpret("g_key_13");
+    _key14 = await _business.interpret("g_key_14");
 
     notifyListeners();
   }
